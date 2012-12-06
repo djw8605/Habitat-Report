@@ -1,6 +1,21 @@
 \documentclass[12pt, notitlepage]{article}
 
 \usepackage{fullpage}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{
+backgroundcolor=\color{white},
+frame=single,
+title=\lstname, 
+keywordstyle=\color{blue}, 
+commentstyle=\color{dkgreen}, 
+stringstyle=\color{mauve}
+}
 
 \begin{document}
 
@@ -35,7 +50,13 @@ In order to evaluate the habitat parallelization, we created input parameters th
 \caption{Input parameters} \label{tab:parameters}
 \end{table}
 
-The habitat executable opens the files habitat.in and makeland.in when it begins execution.  habitat.in contains both the dimensions of the landscape and the number of starting agents.  makeland.in only includes the dimensions of the landscape.  
+The habitat executable opens the files \texttt{habitat.in} and \texttt{makeland.in} when it begins execution.  \texttt{habitat.in} contains both the dimensions of the landscape and the number of starting agents.  \texttt{makeland.in} only includes the dimensions of the landscape.
+
+Evaluation jobs where submitted to Tusker with the submission script shown in Listing \ref{lst:submission file}.
+
+\begin{figure}[ht]
+\lstinputlisting[language=bash,title=pbs.sh,caption={Submission file used for evaluation},label={lst:submissionfile}]{Include/pbs.sh}
+\end{figure}
 
 
 
