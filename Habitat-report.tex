@@ -1,0 +1,43 @@
+\documentclass[12pt, notitlepage]{article}
+
+\usepackage{fullpage}
+
+\begin{document}
+
+
+
+\title{Habitat Simulation}
+\author{Abel Souza, Derek Weitzel, Douglas Silva}
+
+\maketitle
+
+\section{Introduction}
+
+\section{Implementation}
+
+\section{Evaluation}
+
+In order to evaluate the habitat parallelization, we created input parameters that would span possible parameters used by researchers in the simulation.  The application has two main parameters, the landscape size and the number of starting agents.  Since we parallelized the execution of agents, we expect that the application will scale well with the number of agents.  Also, a larger landscape can handle more agents.  We created input parameter files that included different landscape dimensions and starting agents, as shown in Table \ref{tab:parameters}.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{ c | c }
+\textbf{Dimensions} & \textbf{Starting Agents} \\ 
+\hline \hline
+129 x 129 & 300 \\
+129 x 129 & 800 \\
+200 x 200 & 5000 \\
+500 x 500 & 800 \\
+500 x 500 & 50000 \\
+1024 x 1024 & 1000
+\end{tabular}
+\caption{Input parameters} \label{tab:parameters}
+\end{table}
+
+
+
+
+
+\section{Conclusions}
+
+\end{document}
