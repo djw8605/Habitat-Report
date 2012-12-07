@@ -37,7 +37,9 @@ showstringspaces=false
 \section{Implementation}
 
 
-\subsection{Replacing random number nenerator}
+\subsection{Replacing random number generator}
+The random number generator used in the original application had data races that where detected while running valgrind's helgrind tool.  In order to solve the data races, we replaced the random number generator with a thread safe system provided random generator, \texttt{rand\_r}.  This required adding some saved stated for each thread but provides a thread safe random number generator.  
+
 
 \section{Evaluation}
 
