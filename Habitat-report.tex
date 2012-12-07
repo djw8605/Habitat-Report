@@ -4,6 +4,8 @@
 \usepackage{listings}
 \usepackage{color}
 \usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
 
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{dkgreen}{rgb}{0,0.6,0}
@@ -97,7 +99,7 @@ The first set of results are runtimes for one of the runs.
 \end{figure}
 
 
-Speedup is shown in Figure \ref{fig:speedup}.  The speedup plateaus for all runs around 32 or 48 cores.  Next we look at efficiency of, shown in Figure \ref{fig:efficiency}.  The efficiency also drops off significantly as the core count increases.
+Speedup is shown in Figure \ref{fig:speedup}.  The speedup plateaus for all runs around 32 or 48 cores.  The speedup is limited by the serial portion of the application, which is further described later.  Next we look at efficiency of, shown in Figure \ref{fig:efficiency}.  The efficiency also drops off significantly as the core count increases.
 
 \begin{figure}[ht]
 \includegraphics[width=\textwidth]{Include/Efficiency.png}
@@ -126,6 +128,22 @@ The parallel call graph is shown in Figure \ref{fig:parallelcall}.  You can see 
 \includegraphics[width=\textwidth]{Include/parallelcall.pdf}
 \caption{Call graph for the parallelized habitat simulation} \label{fig:parallelcall}
 \end{figure}
+
+\subsection{verification}
+For verification, we sent results for our runs to Drew.  He verified the output and generated 2 graphs, shown in Figure \ref{fig:drewgraphs}.
+
+\begin{figure}[ht]
+\centering
+\subfloat[Landscape quality] {
+\includegraphics[width=.45\textwidth]{Include/Rplot.png}
+}
+\subfloat[Agents in the landscape] {
+\includegraphics[width=.45\textwidth]{Include/Rplot01.pdf}
+}
+\caption{Figures made by Drew from the output of a parallel run} \label{fig:drewgraphs}
+\end{figure}
+
+
 
 \section{Conclusions}
 
