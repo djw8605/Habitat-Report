@@ -39,6 +39,27 @@
 
 \section{Introduction}
 
+A significant problem in wildlife management is identifying ‘‘good’’ habitat for species within the short time frames demanded by policy makers. Statistical models of the response of species presence/absence to predictor variables are one solution, widely known as habitat modeling.
+
+The current model, called Habitat, was made by Andrew J. Tyre and is basically modeling a big landscape and filling it with creatures/animals. The landscape can be seen as a big matrix and each of its position is a cell. In those cells the algorithm fills with creatures/Individuals that will do some calculations inside it to major if this cell has a good or bad quality.
+
+The spread out of Individuals in the landscape can be seen on the picture below in Figure \ref{fig:agentmovement}. The algorithm will determine the cell using one specific function and depending on the input that is given.
+
+
+\begin{figure}[ht!]
+\includegraphics[width=\textwidth]{Include/agentmovement.png}
+\caption{How as Individual “settles” in one cell} \label{fig:agent movement}
+\end{figure}
+
+
+One could imagine that the parallelization of this algorithm could be easy. All we basically need is to parallelize the function that spreads the Individuals out. However, there are some constraints we have to respect in order to generate the right output. These are:
+
+\begin{itemize}
+\item In each cell we can have just one Individual.
+\item One Individual cannot be in two cells at the same time.
+\item We cannot change the structure of the code, because the author is always changing it.
+\end{itemize}
+
 \section{Implementation}
 
 We started our efforts of parallelizing the application by analyzing it by using the Google Profiler tool. The result of the profile, as can be seen in the Figure \ref{fig:originalcall}, showed us that about 58\% of the application running time was being spent inside the disperse4() function.
@@ -131,7 +152,9 @@ The first set of results are runtimes for one of the runs.
 \end{figure}
 
 
-Speedup is shown in Figure \ref{fig:speedup}.  The speedup plateaus for all runs around 32 or 48 cores.  The speedup is limited by the serial portion of the application, which is further described later.  Next we look at efficiency of, shown in Figure \ref{fig:efficiency}.  The efficiency also drops off significantly as the core count increases.
+Speedup is shown in Figure \ref{fig:speedup}.  The speedup plateaus for all runs around 32 or 48 cores.  The speedup is limited by the serial portion of the application, which is further described later.  The largest speedup is at the 500x500, with 50000 starting agents.  The large speedup is caused by a very large number of agents, which our parallelization is optimized for.  The speedup peaks at ~9 at 48 cores.
+
+Next we look at efficiency of, shown in Figure \ref{fig:efficiency}.  The efficiency also drops off significantly as the core count increases.
 
 \begin{figure}[ht]
 \includegraphics[width=\textwidth]{Include/Efficiency.png}
@@ -140,8 +163,6 @@ Speedup is shown in Figure \ref{fig:speedup}.  The speedup plateaus for all runs
 
 
 Both the efficiency and speedup graphs show that application only scales well to around 32 cores.  To verify that this matches with the expected scalability of the application, we have to first look at the call graph.  The original call graph is shown in Figure \ref{fig:originalcall}.
-
-
 
 
 As you can see in Figure \ref{fig:originalcall}, The parallelized function is \texttt{dispersal}, which callee's takes about 79.0\% of the execution time.  Putting 79\% into Amdahl's law, we can compare the theorized speedup with the actual.  The comparison is shown in Figure \ref{fig:amdahls}.  As you can see, the expected and the actual speedups match nearly in the shape and magnitude.  
@@ -155,7 +176,7 @@ The parallel call graph is shown in Figure \ref{fig:parallelcall}.  You can see 
 
 
 \subsection{Verification}
-For verification, we sent results for our runs to Drew.  He verified the output and generated 2 graphs, shown in Figure \ref{fig:drewgraphs}.  Drew said that the output looked accurate.
+For verification, we sent results for our runs to Drew.  He verified the output and generated 2 graphs, shown in Figure \ref{fig:drewgraphs}.  Drew verified that the output appeared accurate.
 
 \begin{figure}[ht]
 \centering
@@ -171,5 +192,9 @@ For verification, we sent results for our runs to Drew.  He verified the output 
 
 
 \section{Conclusions}
+In this project, we parallelized a multi-agent habitat simulation.  We did this by using profiling tools to detect optimal parallelizable sections, and OpenMP to parallelize loops inside the code.  Further, we replaced the random number generator in the simulation with a thread-safe version provided by the system.
+
+We exhaustively evaluated our implementation by running the simulation over a large number of parameters and core counts to determine the speedup of the simulation with our parallelization.  We found that our improvements lead to a speed up of ~9 for large landscapes.  We suspect that larger speedups will be obtained from even larger landscapes and more agents.
+
 
 \end{document}
