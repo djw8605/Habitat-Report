@@ -60,7 +60,9 @@ Evaluation jobs where submitted to Tusker with the submission script shown in Li
 
 As you can see from the submit script in Listing \ref{lst:submissionfile}, the habitat runs execute in isolation.  First it creates a temporary directory and copies the input files and habitat executable into the temporary directory.  Next it starts the execution and times it.  The stderr of the job includes the job run time.  For the purposes of timing, we use the \texttt{real} time output.
 
-The parameters in Table \ref{tab:parameters} where executed at 7 different core counts: 1, 2, 4, 8, 16, 32, 48.  
+The parameters in Table \ref{tab:parameters} where executed at 7 different core counts: 1, 2, 4, 8, 16, 32, 48.  At each core count, we ran 30 identical jobs to get a good sampling.  For analysis, we averaged the 30 runs at each parameter and core count.  Therefore there where over $7 * 6 * 30 = 1260$ runs.  There where also several re-runs, and a previous set of runs before replacing the random number generator.
+
+\subsection{Results}
 
 \section{Conclusions}
 
