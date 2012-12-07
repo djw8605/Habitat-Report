@@ -11,15 +11,20 @@
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+
 \lstset{
-backgroundcolor=\color{white},
-frame=single,
-title=\lstname, 
-keywordstyle=\color{blue}, 
-commentstyle=\color{dkgreen}, 
-stringstyle=\color{mauve},
-showspaces=false,               
-showstringspaces=false
+%backgroundcolor=\color{white},
+%frame=single,
+%title=\lstname, 
+%keywordstyle=\color{blue}, 
+%commentstyle=\color{dkgreen}, 
+%stringstyle=\color{mauve},
+%showspaces=false,               
+%showstringspaces=false
 }
 
 \begin{document}
@@ -35,6 +40,31 @@ showstringspaces=false
 \section{Introduction}
 
 \section{Implementation}
+
+We started our efforts of parallelizing the application by analyzing it by using the Google Profiler tool. The result of the profile, as can be seen in the Figure \ref{fig:originalcall}, showed us that about 58\% of the application running time was being spent inside the disperse4() function.
+
+\begin{figure}[ht]
+\includegraphics[width=\textwidth]{Include/originalcall.pdf}
+\caption{Call graph for the non-parallelized habitat simulation} \label{fig:originalcall}
+\end{figure}
+
+The disperse4() couldn’t be parallelized, because there was not any loop that would be run for a significant time, so we started by analyzing where this function was called. We found that it is just called in another single function, the disperse().
+
+The disperse() function has a loop that will iterate through all individuals that are not settled in a position, until they find the best possible location. The individual also have a chance of dying in the journey, that is being considered inside this function.
+
+This function takes approximately 80\% of the running time. We concluded that the best approach to parallelize the application was to use OpenMP, because this way would require a smaller amount of changes in the original source code and since only 80\% of the application could exploit parallelism, using a massive amount of threads through OpenMPI or CUDA would not really show a great improvement when compared to using a smaller quantity of threads that a single computer could provide, as can be deducted by Amdahl's law.
+
+We also found that there was not any other section of the application that would obtain a considered advantage by being parallelized, therefore we started by modifying the code so that the loop present in the disperse() function could be run in parallel. This required that multiples lock were added through the application to avoid any data hazard. These locks were added in such manner  just one thread can work with a single cell or individual  at a single time.
+
+Some other chances related to memory allocation were necessary to be made in the source code, to avoid some segmentation errors that we started getting when running the application in multiple cores.
+
+These changes allowed a utilization of almost 100\% in all processors during all the application running time. We profiled the application with our changes, and we found that these modifications dramatically changed the profiler graph, as can be seen in the original call graph in Figure \ref{fig:originalcall} and compared to the parallel call graph in Figure \ref{fig:parallelcall}
+
+\begin{figure}[ht]
+\includegraphics[width=\textwidth]{Include/parallelcall.pdf}
+\caption{Call graph for the parallelized habitat simulation} \label{fig:parallelcall}
+\end{figure}
+
 
 
 \subsection{Replacing random number generator}
@@ -65,7 +95,7 @@ The habitat executable opens the files \texttt{habitat.in} and \texttt{makeland.
 Evaluation jobs where submitted to Tusker with the submission script shown in Listing \ref{lst:submissionfile}.
 
 \begin{figure}[ht]
-\centering
+
 \lstinputlisting[language=bash,title=pbs.sh,caption={Submission file used for evaluation},label={lst:submissionfile}]{Include/pbs.sh}
 \end{figure}
 
@@ -111,10 +141,7 @@ Speedup is shown in Figure \ref{fig:speedup}.  The speedup plateaus for all runs
 
 Both the efficiency and speedup graphs show that application only scales well to around 32 cores.  To verify that this matches with the expected scalability of the application, we have to first look at the call graph.  The original call graph is shown in Figure \ref{fig:originalcall}.
 
-\begin{figure}[ht]
-\includegraphics[width=\textwidth]{Include/originalcall.pdf}
-\caption{Call graph for the non-parallelized habitat simulation} \label{fig:originalcall}
-\end{figure}
+
 
 
 As you can see in Figure \ref{fig:originalcall}, The parallelized function is \texttt{dispersal}, which callee's takes about 79.0\% of the execution time.  Putting 79\% into Amdahl's law, we can compare the theorized speedup with the actual.  The comparison is shown in Figure \ref{fig:amdahls}.  As you can see, the expected and the actual speedups match nearly in the shape and magnitude.  
@@ -126,10 +153,6 @@ As you can see in Figure \ref{fig:originalcall}, The parallelized function is \t
 
 The parallel call graph is shown in Figure \ref{fig:parallelcall}.  You can see that \texttt{omp\_get\_num\_procs} function is taking a large amount of the processing time.  We could not determine why it is taking so much time, but you can see that it is being called by the OpenMP lock and unlock functions.  We suspect that the google tool that we used to profile is not able to capture calls to the low level kernel locking function.
 
-\begin{figure}[ht]
-\includegraphics[width=\textwidth]{Include/parallelcall.pdf}
-\caption{Call graph for the parallelized habitat simulation} \label{fig:parallelcall}
-\end{figure}
 
 \subsection{Verification}
 For verification, we sent results for our runs to Drew.  He verified the output and generated 2 graphs, shown in Figure \ref{fig:drewgraphs}.  Drew said that the output looked accurate.
