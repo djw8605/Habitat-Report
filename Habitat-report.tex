@@ -3,6 +3,7 @@
 \usepackage{fullpage}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{graphicx}
 
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{dkgreen}{rgb}{0,0.6,0}
@@ -89,6 +90,18 @@ The first set of results are runtimes for one of the runs.
 \end{table}
 
 1024 x 1024 is a very large landscape for Drew.  He is unable to run a landscape this large on his own machine due to the memory requirements.
+
+\begin{figure}[ht]
+\includegraphics[width=\textwidth]{Include/SpeedupRuns.png}
+\caption{Speedup for all Runs} \label{fig:speedup}
+\end{figure}
+
+Speedup is shown in Figure \ref{fig:speedup}.  The speedup plateaus for all runs around 32 or 48 cores.  Next we look at efficiency of, shown in Figure \ref{fig:efficiency}.  The efficiency also drops off significantly as the core count increases.
+
+\begin{figure}[ht]
+\includegraphics[width=\textwidth]{Include/Efficiency.png}
+\caption{efficiency for all Runs} \label{fig:efficiency}
+\end{figure}
 
 \section{Conclusions}
 
