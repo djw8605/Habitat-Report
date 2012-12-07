@@ -120,7 +120,12 @@ As you can see in Figure \ref{fig:originalcall}, The parallelized function is \t
 \caption{Comparison of Amdahl's theorized speedup at 79\%} \label{fig:amdahls}
 \end{figure}
 
-The parallel call graph is shown in Figure \ref{fig:parallelcall}.  You can see that \texttt{omp_get_num_procs} function is taking a large amount of the processing time.  We could not determine why it is taking so much time, but you can see that it is being called by the OpenMP lock and unlock functions.
+The parallel call graph is shown in Figure \ref{fig:parallelcall}.  You can see that \texttt{omp\_get\_num\_procs} function is taking a large amount of the processing time.  We could not determine why it is taking so much time, but you can see that it is being called by the OpenMP lock and unlock functions.  We suspect that the google tool that we used to profile is not able to capture calls to the low level kernel locking function.
+
+\begin{figure}[ht]
+\includegraphics[width=\textwidth]{Include/parallelcall.pdf}
+\caption{Call graph for the parallelized habitat simulation} \label{fig:parallelcall}
+\end{figure}
 
 \section{Conclusions}
 
