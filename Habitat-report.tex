@@ -52,13 +52,15 @@ In order to evaluate the habitat parallelization, we created input parameters th
 
 The habitat executable opens the files \texttt{habitat.in} and \texttt{makeland.in} when it begins execution.  \texttt{habitat.in} contains both the dimensions of the landscape and the number of starting agents.  \texttt{makeland.in} only includes the dimensions of the landscape.
 
-Evaluation jobs where submitted to Tusker with the submission script shown in Listing \ref{lst:submission file}.
+Evaluation jobs where submitted to Tusker with the submission script shown in Listing \ref{lst:submissionfile}.
 
 \begin{figure}[ht]
 \lstinputlisting[language=bash,title=pbs.sh,caption={Submission file used for evaluation},label={lst:submissionfile}]{Include/pbs.sh}
 \end{figure}
 
+As you can see from the submit script in Listing \ref{lst:submissionfile}, the habitat runs execute in isolation.  First it creates a temporary directory and copies the input files and habitat executable into the temporary directory.  Next it starts the execution and times it.  The stderr of the job includes the job run time.  For the purposes of timing, we use the \texttt{real} time output.
 
+The parameters in Table \ref{tab:parameters} where executed at 7 different core counts: 1, 2, 4, 8, 16, 32, 48.  
 
 \section{Conclusions}
 
