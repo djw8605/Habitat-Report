@@ -1,6 +1,6 @@
 #!/bin/sh
 #PBS -l walltime=20:00:00
-#PBS -l nodes=1:ppn=64
+#PBS -l nodes=1:ppn=32
 #PBS -l mem=2048
 #PBS -t 0-29
 
