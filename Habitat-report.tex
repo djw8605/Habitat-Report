@@ -96,12 +96,31 @@ The first set of results are runtimes for one of the runs.
 \caption{Speedup for all Runs} \label{fig:speedup}
 \end{figure}
 
+
 Speedup is shown in Figure \ref{fig:speedup}.  The speedup plateaus for all runs around 32 or 48 cores.  Next we look at efficiency of, shown in Figure \ref{fig:efficiency}.  The efficiency also drops off significantly as the core count increases.
 
 \begin{figure}[ht]
 \includegraphics[width=\textwidth]{Include/Efficiency.png}
-\caption{efficiency for all Runs} \label{fig:efficiency}
+\caption{Efficiency for all Runs} \label{fig:efficiency}
 \end{figure}
+
+
+Both the efficiency and speedup graphs show that application only scales well to around 32 cores.  To verify that this matches with the expected scalability of the application, we have to first look at the call graph.  The original call graph is shown in Figure \ref{fig:originalcall}.
+
+\begin{figure}[ht]
+\includegraphics[width=\textwidth]{Include/originalcall.pdf}
+\caption{Call graph for the non-parallelized habitat simulation} \label{fig:originalcall}
+\end{figure}
+
+
+As you can see in Figure \ref{fig:originalcall}, The parallelized function is \texttt{dispersal}, which callee's takes about 79.0\% of the execution time.  Putting 79\% into Amdahl's law, we can compare the theorized speedup with the actual.  The comparison is shown in Figure \ref{fig:amdahls}.  As you can see, the expected and the actual speedups match nearly in the shape and magnitude.  
+
+\begin{figure}[ht]
+\includegraphics[width=\textwidth]{Include/amdahls.png}
+\caption{Comparison of Amdahl's theorized speedup at 79\%} \label{fig:amdahls}
+\end{figure}
+
+The parallel call graph is shown in Figure \ref{fig:parallelcall}.  You can see that \texttt{omp_get_num_procs} function is taking a large amount of the processing time.  We could not determine why it is taking so much time, but you can see that it is being called by the OpenMP lock and unlock functions.
 
 \section{Conclusions}
 
