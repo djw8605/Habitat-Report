@@ -14,7 +14,9 @@ frame=single,
 title=\lstname, 
 keywordstyle=\color{blue}, 
 commentstyle=\color{dkgreen}, 
-stringstyle=\color{mauve}
+stringstyle=\color{mauve},
+showspaces=false,               
+showstringspaces=false
 }
 
 \begin{document}
@@ -58,14 +60,35 @@ The habitat executable opens the files \texttt{habitat.in} and \texttt{makeland.
 Evaluation jobs where submitted to Tusker with the submission script shown in Listing \ref{lst:submissionfile}.
 
 \begin{figure}[ht]
+\centering
 \lstinputlisting[language=bash,title=pbs.sh,caption={Submission file used for evaluation},label={lst:submissionfile}]{Include/pbs.sh}
 \end{figure}
 
 As you can see from the submit script in Listing \ref{lst:submissionfile}, the habitat runs execute in isolation.  First it creates a temporary directory and copies the input files and habitat executable into the temporary directory.  Next it starts the execution and times it.  The stderr of the job includes the job run time.  For the purposes of timing, we use the \texttt{real} time output.
 
-The parameters in Table \ref{tab:parameters} where executed at 7 different core counts: 1, 2, 4, 8, 16, 32, 48.  At each core count, we ran 30 identical jobs to get a good sampling.  For analysis, we averaged the 30 runs at each parameter and core count.  Therefore there where over $7 * 6 * 30 = 1260$ runs.  There where also several re-runs, and a previous set of runs before replacing the random number generator.
+The parameters in Table \ref{tab:parameters} where executed at 7 different core counts: 1, 2, 4, 8, 16, 32, 48.  At each core count, we ran 30 identical jobs to get a good sampling.  For analysis, we averaged the 30 runs at each parameter and core count.  Therefore there where over $7 * 6 * 30 = 1260$ runs.  There where also several re-runs, and a previous set of runs before replacing the random number generator, totaling over 2100 runs of the habitat simulation.
 
 \subsection{Results}
+
+The first set of results are runtimes for one of the runs.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{ r | r }
+\textbf{Cores} & \textbf{Runtime (m)} \\
+\hline \hline
+1 & 186.81\\
+2 & 142.89\\
+4 & 85.59\\
+8 & 61.23\\
+16 & 37.11\\
+32 & 29.49\\
+48 & 26.16\\
+\end{tabular}
+\caption{Runtimes for 1024 x 1024 and 1000 starting agents} \label{tab:runtimes}
+\end{table}
+
+1024 x 1024 is a very large landscape for Drew.  He is unable to run a landscape this large on his own machine due to the memory requirements.
 
 \section{Conclusions}
 
