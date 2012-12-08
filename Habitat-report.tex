@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{url}
 
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{dkgreen}{rgb}{0,0.6,0}
@@ -20,11 +21,11 @@
 %backgroundcolor=\color{white},
 %frame=single,
 %title=\lstname, 
-%keywordstyle=\color{blue}, 
-%commentstyle=\color{dkgreen}, 
-%stringstyle=\color{mauve},
-%showspaces=false,               
-%showstringspaces=false
+keywordstyle=\color{blue}, 
+commentstyle=\color{dkgreen}, 
+stringstyle=\color{mauve},
+showspaces=false,               
+showstringspaces=false
 }
 
 \begin{document}
@@ -48,7 +49,7 @@ The spread out of Individuals in the landscape can be seen on the picture below 
 
 \begin{figure}[ht!]
 \includegraphics[width=\textwidth]{Include/agentmovement.png}
-\caption{How as Individual “settles” in one cell} \label{fig:agent movement}
+\caption{How an individual settles in one cell} \label{fig:agentmovement}
 \end{figure}
 
 
@@ -79,7 +80,7 @@ We also found that there was not any other section of the application that would
 
 Some other chances related to memory allocation were necessary to be made in the source code, to avoid some segmentation errors that we started getting when running the application in multiple cores.
 
-These changes allowed a utilization of almost 100\% in all processors during all the application running time. We profiled the application with our changes, and we found that these modifications dramatically changed the profiler graph, as can be seen in the original call graph in Figure \ref{fig:originalcall} and compared to the parallel call graph in Figure \ref{fig:parallelcall}
+These changes allowed a utilization of almost 100\% in all processors during all the application running time. We profiled the application with our changes, and we found that these modifications dramatically changed the profiler graph, as can be seen in the original call graph in Figure \ref{fig:originalcall} and compared to the parallel call graph in Figure \ref{fig:parallelcall}.
 
 \begin{figure}[ht]
 \includegraphics[width=\textwidth]{Include/parallelcall.pdf}
@@ -196,5 +197,6 @@ In this project, we parallelized a multi-agent habitat simulation.  We did this 
 
 We exhaustively evaluated our implementation by running the simulation over a large number of parameters and core counts to determine the speedup of the simulation with our parallelization.  We found that our improvements lead to a speed up of ~9 for large landscapes.  We suspect that larger speedups will be obtained from even larger landscapes and more agents.
 
+We provided the source of our modifications and the scheduler submit files to Drew Tyre on the github page, available at \url{https://github.com/djw8605/habitat}.
 
 \end{document}
